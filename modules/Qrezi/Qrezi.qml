@@ -21,8 +21,11 @@ Item {
    property alias current_y:     zoomer.current_y
    property alias current_scale: zoomer.current_scale
 
-   property alias background: background_holder.children
-   property alias foreground: foreground_holder.children
+   property Item background: null
+   property Item foreground: null
+
+   onBackgroundChanged: { if (background) background.parent = background_holder }
+   onForegroundChanged: { if (foreground) foreground.parent = foreground_holder }
 
    Item {
       id: background_holder
