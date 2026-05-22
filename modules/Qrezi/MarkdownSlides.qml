@@ -1,5 +1,5 @@
-import QtQuick 2.2
-import Qrezi 0.1
+import QtQuick
+import Qrezi
 import "qrezi_tools.js" as Tools
 
 Frame {
@@ -60,7 +60,7 @@ Frame {
             {
                var heading_text = line.split('#')[1].trim();
                var item = Qt.createQmlObject(
-                 "import QtQuick 2.2
+                 "import QtQuick
                   import Qrezi 0.1
 
                   BasicSlide {   // TODO should com from outside and the created here

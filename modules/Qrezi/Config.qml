@@ -1,4 +1,4 @@
-import QtQuick 2.2
+import QtQuick
 
 QtObject {
    property int slide_width:        800

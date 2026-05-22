@@ -1,4 +1,4 @@
-import QtQuick 2.2
+import QtQuick
 import "qrezi_tools.js" as Tools
 
 import "hljs/highlight.js"            as HLJS

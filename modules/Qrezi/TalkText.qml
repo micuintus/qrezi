@@ -1,4 +1,4 @@
-import  QtQuick 2.2
+import QtQuick
 import  QtGraphicalEffects  1.0
 
 Item {

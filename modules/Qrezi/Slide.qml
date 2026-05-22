@@ -1,5 +1,4 @@
-import QtQuick 2.2
-import "." 0.1
+import QtQuick
 import "qrezi_tools.js" as Tools
 
 Frame {

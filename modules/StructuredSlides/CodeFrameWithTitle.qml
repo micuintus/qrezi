@@ -1,5 +1,5 @@
-import QtQuick 2.9
-import Qrezi 0.1
+import QtQuick
+import Qrezi
 
 Frame {
 
