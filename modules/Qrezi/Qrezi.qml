@@ -8,8 +8,9 @@ Item {
 
    property Config config: Config {}
 
-   width:  config.slide_width
-   height: config.slide_height
+   // Intentionally no explicit width/height — QQuickView::SizeRootObjectToView
+   // will resize this root item to fill the screen. The design dimensions are
+   // kept as properties for scale calculations in Zoomer.
 
    property alias slides: zoomer.slides
    readonly property alias flat_slides: zoomer.flat_slides
