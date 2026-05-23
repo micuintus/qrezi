@@ -80,7 +80,6 @@ Rectangle {
 
          id: text_item
 
-         font.family: "Source Code Pro"
          font.pointSize: 20
          //font.weight: Font.Light
          textFormat: Text.RichText

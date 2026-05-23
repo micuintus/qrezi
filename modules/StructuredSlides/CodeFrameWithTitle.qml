@@ -28,7 +28,7 @@ Frame {
               // style: "atelier-heath.light"
               language: "c++"
               // font.pointSize: 30
-              font.family: "Source Code Pro"
+
 
               text: "c = c++;"
 

@@ -95,7 +95,7 @@ Item {
 
       focus: true
 
-      Keys.onPressed: {
+      Keys.onPressed: (event) => {
          switch (event.key) {
             case Qt.Key_Space: {
                next_view()
