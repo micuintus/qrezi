@@ -10,7 +10,7 @@ Item {
 
    property alias current_x:     translator.x
    property alias current_y:     translator.y
-   property alias current_scale: scaler.scale
+   property alias current_scale: scaler._zoomScale
 
    default property alias frames:          transformer.data
    property alias         current_frame:   transformer.current_frame
@@ -87,18 +87,21 @@ Item {
             Behavior on angle { NumberAnimation { duration: animation_time; easing.type: Easing.InOutCubic } id: rotAni }
          },
          Scale {
+            // Custom property is named _zoomScale (not "scale") because Qt6's
+            // Scale element treats "scale" specially in its transform system,
+            // silently breaking the zoom math when shadowed.
             id: scaler
             property real scaleTo: 1
-            property real scale: 1
-            xScale: scale
-            yScale: scale
+            property real _zoomScale: 1
+            xScale: _zoomScale
+            yScale: _zoomScale
             origin.x: root.width/2
             origin.y: root.height/2
             onScaleToChanged: {
-               scaleAni.easing.type = (scale < scaleTo) ? Easing.InQuint : Easing.OutQuint
-               scale = scaleTo
+               scaleAni.easing.type = (_zoomScale < scaleTo) ? Easing.InQuint : Easing.OutQuint
+               _zoomScale = scaleTo
             }
-            Behavior on scale {
+            Behavior on _zoomScale {
                id: scaleBehav
                NumberAnimation { id: scaleAni; duration: animation_time; easing.type: Easing.InQuint }
             }
@@ -153,8 +156,8 @@ Item {
          var c = Math.cos( -to_rad( rotator.angle ))
          var dx = mouse.x - _mouse_pos.x
          var dy = mouse.y - _mouse_pos.y
-         translator.x = _canvas_pos.x + (c*dx - s*dy) / scaler.scale
-         translator.y = _canvas_pos.y + (s*dx + c*dy) / scaler.scale
+         translator.x = _canvas_pos.x + (c*dx - s*dy) / scaler._zoomScale
+         translator.y = _canvas_pos.y + (s*dx + c*dy) / scaler._zoomScale
       }
 
       onWheel: {
@@ -170,8 +173,8 @@ Item {
          }
 
          scaleBehav.enabled = false
-         if (wheel.angleDelta.y < 0) scaler.scale /= 1. - 0.001 * wheel.angleDelta.y
-         else                        scaler.scale *= 1. + 0.001 * wheel.angleDelta.y
+         if (wheel.angleDelta.y < 0) scaler._zoomScale /= 1. - 0.001 * wheel.angleDelta.y
+         else                        scaler._zoomScale *= 1. + 0.001 * wheel.angleDelta.y
          scaleBehav.enabled = true
       }
 
