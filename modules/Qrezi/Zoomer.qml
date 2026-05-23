@@ -25,11 +25,10 @@ Item {
    function bound_angle( angle )  { return mod( angle+180 , 360) - 180 }
    function hypotenuse( dx , dy ) { return Math.sqrt( dx*dx + dy*dy ) }
 
-   // This is required for automatic update at window resizing, e.g. going full screen
-   // For some reason division by zero at start up breaks the internal state.
-   // TODO investigate further
-   // onWidthChanged:  transformer.updateSlides()
-   // onHeightChanged: transformer.updateSlides()
+   // Re-enabled with NaN guard in updateSlides() — division by zero at startup
+   // is now handled gracefully, so window resize updates work correctly.
+   onWidthChanged:  transformer.updateSlides()
+   onHeightChanged: transformer.updateSlides()
 
    Item {
 
@@ -40,6 +39,11 @@ Item {
       property variant current_frame: root
 
       onCurrent_frameChanged: updateSlides()
+
+      Component.onCompleted: {
+         // Defer to next event loop tick so all child bindings/layouts resolve
+         Qt.callLater(updateSlides)
+      }
 
       function get_rect(item) {
          var p00 = transformer.mapFromItem( item, 0, 0 )
@@ -57,10 +61,16 @@ Item {
 
       function updateSlides() {
          var s = current_frame
+         if (!s || s.width === 0 || s.height === 0 || root.width === 0 || root.height === 0)
+            return
          var r = get_rect(current_frame)
+         if (r.width === 0 || r.height === 0 || r.scale === 0)
+            return
          translator.x  =  -r.x + (root.width - r.width) / 2
          translator.y  =  -r.y + (root.height - r.height) / 2
-         scaler.scaleTo =  1.0 / ( r.scale * Math.max( s.width / root.width, s.height / root.height ) )
+         var scaleFactor = Math.max( s.width / root.width, s.height / root.height )
+         if (scaleFactor === 0) return
+         scaler.scaleTo =  1.0 / ( r.scale * scaleFactor )
          rotator.angle -= bound_angle( rotator.angle + r.rotation )
       }
 
